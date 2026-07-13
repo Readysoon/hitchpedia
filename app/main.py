@@ -10,8 +10,13 @@ from .controllers import info, search, contribute
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     database.init()
-    await asyncio.to_thread(embeddings.warmup)  # Embedding-Modell vorladen
+    # Modell im HINTERGRUND laden, damit uvicorn sofort auf :8000 bindet.
+    # Blockierender Warmup verzögerte das Binden um ~15-30s -> fly-proxy gab beim
+    # Cold-Start auf (502). / und /e brauchen kein Modell; nur der erste /s wartet
+    # ggf. kurz auf das Laden (per Lock gegen Doppel-Load abgesichert).
+    app.state.warmup = asyncio.create_task(asyncio.to_thread(embeddings.warmup))
     yield
+    app.state.warmup.cancel()
     database.pool.close()
 
 

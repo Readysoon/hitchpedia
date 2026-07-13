@@ -4,17 +4,26 @@ nomic-embed-text-v1.5 nutzt Task-Prefixe: 'search_query:' für Suchanfragen,
 'search_document:' für gespeicherte Dokumente.
 """
 import asyncio
-from fastembed import TextEmbedding
+import threading
 from ..config import EMBED_MODEL
 
 _PREFIX = {"query": "search_query: ", "document": "search_document: "}
 _model = None
+_model_lock = threading.Lock()
 
 
-def _get_model() -> TextEmbedding:
+def _get_model():
+    # fastembed/onnxruntime wird LAZY importiert: der Import allein dauert ~15s
+    # und würde sonst das Binden von uvicorn verzögern -> fly-proxy gibt beim
+    # Cold-Start-Wake auf (~8s Geduld). So bindet die App in ~2-3s; der teure
+    # Import + Modell-Load läuft im Hintergrund-Warmup bzw. beim ersten Search.
+    # Double-checked Locking verhindert Doppel-Load (RAM-Peak -> OOM-Risiko).
     global _model
     if _model is None:
-        _model = TextEmbedding(model_name=EMBED_MODEL)
+        with _model_lock:
+            if _model is None:
+                from fastembed import TextEmbedding
+                _model = TextEmbedding(model_name=EMBED_MODEL)
     return _model
 
 
