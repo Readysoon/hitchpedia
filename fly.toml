@@ -1,0 +1,20 @@
+# fly.toml — hitchpedia (FastAPI + fastembed). Postgres+pgvector läuft extern (Neon, via DATABASE_URL-Secret).
+app = "hitchpedia"
+primary_region = "fra"   # Frankfurt (nah an DE)
+
+[build]
+
+[env]
+  HP_BASE_URL = "https://hitchpedia.fly.dev"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  memory = "1gb"        # nomic-Modell + onnxruntime brauchen RAM
+  cpu_kind = "shared"
+  cpus = 1

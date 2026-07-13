@@ -1,9 +1,9 @@
 """Zentrale Konfiguration (via Env überschreibbar)."""
 import os
 
-DB_CONNINFO = os.getenv("HP_DB", "dbname=hitchpedia")
-OLLAMA_URL = os.getenv("HP_OLLAMA_URL", "http://localhost:11434/api/embeddings")
-EMBED_MODEL = os.getenv("HP_EMBED_MODEL", "nomic-embed-text")
+# Neon in Prod (DATABASE_URL), lokal Fallback auf lokales Postgres
+DB_CONNINFO = os.getenv("DATABASE_URL") or os.getenv("HP_DB", "dbname=hitchpedia")
+EMBED_MODEL = os.getenv("HP_EMBED_MODEL", "nomic-ai/nomic-embed-text-v1.5")  # fastembed (in-process, kein Server/Key)
 EMBED_DIM = int(os.getenv("HP_EMBED_DIM", "768"))
 BASE_URL = os.getenv("HP_BASE_URL", "http://localhost:8000")
 

@@ -1,0 +1,9 @@
+.venv/
+.git/
+__pycache__/
+*.pyc
+*.log
+*.db
+prototype-node/
+.DS_Store
+uvicorn.log
