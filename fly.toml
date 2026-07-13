@@ -12,7 +12,7 @@ primary_region = "fra"   # Frankfurt (nah an DE)
   force_https = true
   auto_stop_machines = "stop"
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1   # eine Maschine bleibt warm -> Modell heiss, erste Suche instant (kein Cold-Start)
 
 [[vm]]
   memory = "2gb"        # nomic-Modell + onnxruntime: 1gb -> OOM-Kill (~1.4gb Peak)
