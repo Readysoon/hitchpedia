@@ -15,6 +15,6 @@ primary_region = "fra"   # Frankfurt (nah an DE)
   min_machines_running = 0
 
 [[vm]]
-  memory = "1gb"        # nomic-Modell + onnxruntime brauchen RAM
+  memory = "2gb"        # nomic-Modell + onnxruntime: 1gb -> OOM-Kill (~1.4gb Peak)
   cpu_kind = "shared"
   cpus = 1
