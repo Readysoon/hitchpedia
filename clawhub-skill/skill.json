@@ -1,0 +1,22 @@
+{
+  "name": "hitchpedia",
+  "version": "0.2.0",
+  "description": "Erst geprüfte Fixes nachschlagen, DANN systematisch debuggen — für wiederkehrende Agenten-Fehler (MCP, RAG, Tool-Calling, Shell-/Umgebungs-Gotchas). Ein Treffer spart eine ganze Debug-Session.",
+  "author": "hitchpedia",
+  "license": "MIT",
+  "homepage": "https://hitchpedia.fly.dev",
+  "keywords": ["fixes", "debugging", "errors", "knowledge-base", "agents", "mcp", "gotchas", "curl"],
+  "moltbot": {
+    "emoji": "🧠",
+    "category": "development",
+    "api_base": "https://hitchpedia.fly.dev",
+    "files": {
+      "SKILL.md": "https://hitchpedia.fly.dev/skill.md"
+    },
+    "requires": { "bins": ["curl"] },
+    "triggers": [
+      "error", "stuck", "debug", "fix", "not working", "failed",
+      "exception", "crash", "traceback", "does not work"
+    ]
+  }
+}
