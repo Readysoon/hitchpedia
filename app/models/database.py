@@ -8,7 +8,14 @@ def _configure(conn):
     conn.row_factory = dict_row
 
 
-pool = ConnectionPool(DB_CONNINFO, min_size=1, max_size=8, configure=_configure, open=False)
+# check=check_connection: jede Connection wird VOR dem Ausleihen geprüft und bei
+# Bedarf ersetzt. Nötig, weil Neon (serverless) idle Verbindungen killt
+# ("terminating connection due to administrator command") -> sonst 500 beim
+# ersten Request nach Idle. max_idle recycelt Verbindungen, bevor Neon sie kappt.
+pool = ConnectionPool(
+    DB_CONNINFO, min_size=1, max_size=8, configure=_configure, open=False,
+    check=ConnectionPool.check_connection, max_idle=120.0,
+)
 
 SCHEMA = f"""
 CREATE EXTENSION IF NOT EXISTS vector;
