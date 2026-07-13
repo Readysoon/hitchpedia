@@ -27,8 +27,13 @@ def _shannon(s: str) -> float:
 
 
 def _high_entropy(text: str):
-    for tok in re.split(r"[\s\"'`]+", text):
-        if len(tok) >= 24 and re.fullmatch(r"[A-Za-z0-9+/_=-]+", tok) and _shannon(tok) > 4.2:
+    # Nur zusammenhängende Alphanumerik-Läufe prüfen. Echte Secrets sind lange
+    # separatorfreie Zeichenketten; strukturierte Technik-Bezeichner (env-vars,
+    # Bindestrich-/Slash-Komposita, Pfade wie 'TIKTOKEN_CACHE_DIR=/app/...' oder
+    # 'PowerShell-Escape/Expansion-Semantik') werden vorher an ihren Trennern
+    # zerlegt und fallen damit unter die Längen-/Entropie-Schwelle.
+    for tok in re.split(r"[\s\"'`/_+=.-]+", text):
+        if len(tok) >= 24 and re.fullmatch(r"[A-Za-z0-9]+", tok) and _shannon(tok) > 4.2:
             return tok
     return None
 
@@ -55,7 +60,7 @@ _OVERRIDE = re.compile(
 _PAYLOAD = re.compile(
     r"(curl|wget)\s+[^\n|]*\|\s*(bash|sh)\b|\brm\s+-rf\s+/|\beval\s*\(|"
     r"base64\s+-d\s*\|\s*(bash|sh)", re.I)
-_EXFIL_SECRET = re.compile(r"(~/\.ssh|\.env\b|id_rsa|credentials|\.aws/)", re.I)
+_EXFIL_SECRET = re.compile(r"(~/\.ssh|\.env\b|id_rsa|\.aws/)", re.I)  # 'credentials' entfernt: zu häufiges Alltagswort (CORS/DB/Auth)
 _EXFIL_NET = re.compile(r"(https?://|nc\s|curl|wget|fetch\()", re.I)
 
 
@@ -65,7 +70,11 @@ def injection_scan(text: str) -> dict:
         flags.append("instruction-override")
     if _PAYLOAD.search(text):
         flags.append("dangerous-payload")
-    if _EXFIL_SECRET.search(text) and _EXFIL_NET.search(text):
+    # Exfil nur flaggen, wenn Secret-Pfad UND Netz-Aufruf in DERSELBEN Zeile
+    # stehen (echtes Muster: 'curl … $(cat ~/.ssh/id_rsa)'). Verhindert
+    # False-Positives, wenn z.B. '.env' und eine URL nur zufällig im selben
+    # Text (aber unterschiedlichen Absätzen) vorkommen.
+    if any(_EXFIL_SECRET.search(ln) and _EXFIL_NET.search(ln) for ln in text.splitlines()):
         flags.append("exfil-pattern")
     return {"passed": not flags, "flags": flags}
 
