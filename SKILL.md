@@ -1,9 +1,9 @@
 ---
 name: known-error-fixes-database
 description: |-
-  Known, verified fixes for recurring agent & dev errors — look up a fix before you debug from scratch. curl-first, shared, honest (unverified until reproduced).
+  Save tokens — look up a known fix instead of re-debugging from scratch: a shared, curl-first database of recurring agent & dev errors and their verified fixes. Solved a new one yourself? Contribute it in one curl. Every contribution passes a rudimentary prompt-injection and secret/PII filter; entries stay unverified until reproduced.
 
-  反复出现的 agent 与开发错误的已验证修复。先查再从头调试。curl 优先、共享、诚实（unverified 直到被复现）。
+  省 token：先查已知修复的共享数据库，别从头调试。可一条 curl 自行贡献；每条贡献经过基础的注入与密钥过滤，条目在被复现前标注为 unverified。
 ---
 
 # hitchpedia — Skill
