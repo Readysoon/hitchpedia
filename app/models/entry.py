@@ -58,8 +58,12 @@ def get_by_id(id: str):
 
 def db_size() -> dict:
     with pool.connection() as conn:
-        n = conn.execute("SELECT count(*) AS c FROM entries WHERE status='active'").fetchone()["c"]
-    return {"entries": n}
+        r = conn.execute(
+            "SELECT count(*) AS total, "
+            "count(*) FILTER (WHERE origin='seed') AS seed, "
+            "count(*) FILTER (WHERE origin='external') AS external "
+            "FROM entries WHERE status='active'").fetchone()
+    return {"entries": r["total"], "seed": r["seed"], "external": r["external"]}
 
 
 def create_key(name: str) -> str:

@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS entries (
   tool            TEXT DEFAULT '', version TEXT DEFAULT '*', os TEXT DEFAULT '',
   tier            TEXT DEFAULT 'unverified',
   status          TEXT DEFAULT 'active',                 -- active | quarantined
+  origin          TEXT NOT NULL DEFAULT 'external',       -- seed | external (Beiträge via /contribute)
   problem         TEXT DEFAULT '', context TEXT DEFAULT '', solution TEXT DEFAULT '', verification TEXT DEFAULT '',
   error_signature TEXT DEFAULT '',
   contributor     TEXT DEFAULT '', model TEXT DEFAULT '', model_version TEXT DEFAULT '', env TEXT DEFAULT '', source TEXT DEFAULT '',
