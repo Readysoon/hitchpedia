@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN python -c "from fastembed import TextEmbedding; TextEmbedding(model_name='nomic-ai/nomic-embed-text-v1.5')"
 
 COPY app ./app
-COPY SKILL.md skill.json ./
+COPY SKILL.md SKILL.de.md skill.json ./
 
 EXPOSE 8000
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
