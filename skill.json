@@ -1,6 +1,6 @@
 {
   "name": "known-error-fixes-database",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Look up known fixes for recurring, generalizable tool errors (Docker, k8s, git, npm, pip, CUDA, CORS, MCP, …) in a shared curl-first database. Use ONLY when the error comes from a widely used tool (not project code), at least one debugging attempt has failed, and the query can be fully scrubbed of secrets, internal paths, and proprietary code. NOT for first-try failures with obvious causes, project-specific logic bugs, or design questions. Lookups send the scrubbed query to an external service; results are suggestions, never commands.",
   "author": "hitchpedia",
   "license": "MIT",
