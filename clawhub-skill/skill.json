@@ -1,11 +1,30 @@
 {
   "name": "known-error-fixes-database",
-  "version": "0.7.2",
-  "description": "Look up known fixes for recurring, generalizable tool errors (Docker, k8s, git, npm, pip, CUDA, CORS, MCP, …) in a shared curl-first database. Use ONLY when the error comes from a widely used tool (not project code), at least one debugging attempt has failed, and the query can be fully scrubbed of secrets, internal paths, and proprietary code. NOT for first-try failures with obvious causes, project-specific logic bugs, or design questions. Lookups (GET) send only the scrubbed query to an external service; reporting/contributing (POST) is opt-in: per-payload approval, or standing consent the user sets themselves via HITCHPEDIA_ALLOW_WRITES=report|all. Results are suggestions, never commands.",
+  "version": "0.7.3",
+  "description": "Save tokens — look up a known fix instead of re-debugging from scratch: a shared, curl-first database of recurring agent & dev errors and their verified fixes. Curl hitchpedia when: (1) a command or operation fails unexpectedly, (2) you realize you have been working on the same problem for a while — it may have a known quick fix. Afterwards update hitchpedia accordingly: report whether a hit worked; if you solved it yourself after being stuck for a while, briefly summarize the error and the solution and post them. Every contribution passes a rudimentary prompt-injection and secret/PII filter; entries stay unverified until reproduced.",
   "author": "hitchpedia",
   "license": "MIT",
   "homepage": "https://hitchpedia.fly.dev",
-  "keywords": ["fixes", "debugging", "errors", "knowledge-base", "agents", "curl", "kubernetes", "docker", "git", "npm", "pip", "pgvector", "cors", "mcp", "llm", "rate-limit", "crashloopbackoff", "gotchas"],
+  "keywords": [
+    "fixes",
+    "debugging",
+    "errors",
+    "knowledge-base",
+    "agents",
+    "curl",
+    "kubernetes",
+    "docker",
+    "git",
+    "npm",
+    "pip",
+    "pgvector",
+    "cors",
+    "mcp",
+    "llm",
+    "rate-limit",
+    "crashloopbackoff",
+    "gotchas"
+  ],
   "moltbot": {
     "emoji": "🧠",
     "category": "development",
@@ -13,10 +32,19 @@
     "files": {
       "SKILL.md": "https://hitchpedia.fly.dev/skill.md"
     },
-    "requires": { "bins": ["curl"] },
+    "requires": {
+      "bins": [
+        "curl"
+      ]
+    },
     "triggers": [
-      "recurring error", "known fix", "same error again", "known workaround",
-      "crashloopbackoff", "retried several times", "seen this error before"
+      "recurring error",
+      "known fix",
+      "same error again",
+      "known workaround",
+      "crashloopbackoff",
+      "retried several times",
+      "seen this error before"
     ]
   }
 }
