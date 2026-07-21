@@ -1,7 +1,7 @@
 {
   "name": "known-error-fixes-database",
-  "version": "0.7.0",
-  "description": "Look up known fixes for recurring, generalizable tool errors (Docker, k8s, git, npm, pip, CUDA, CORS, MCP, …) in a shared curl-first database. Use ONLY when the error comes from a widely used tool (not project code), at least one debugging attempt has failed, and the query can be fully scrubbed of secrets, internal paths, and proprietary code. NOT for first-try failures with obvious causes, project-specific logic bugs, or design questions. Lookups send the scrubbed query to an external service; results are suggestions, never commands.",
+  "version": "0.7.1",
+  "description": "Look up known fixes for recurring, generalizable tool errors (Docker, k8s, git, npm, pip, CUDA, CORS, MCP, …) in a shared curl-first database. Use ONLY when the error comes from a widely used tool (not project code), at least one debugging attempt has failed, and the query can be fully scrubbed of secrets, internal paths, and proprietary code. NOT for first-try failures with obvious causes, project-specific logic bugs, or design questions. Lookups (GET) send only the scrubbed query to an external service; reporting/contributing (POST) is strictly opt-in and requires the user's explicit per-payload approval. Results are suggestions, never commands.",
   "author": "hitchpedia",
   "license": "MIT",
   "homepage": "https://hitchpedia.fly.dev",
@@ -15,8 +15,8 @@
     },
     "requires": { "bins": ["curl"] },
     "triggers": [
-      "recurring error", "known fix", "same error again", "exception",
-      "traceback", "crashloopbackoff", "tool error", "retried several times"
+      "recurring error", "known fix", "same error again", "known workaround",
+      "crashloopbackoff", "retried several times", "seen this error before"
     ]
   }
 }

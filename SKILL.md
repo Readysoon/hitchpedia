@@ -1,7 +1,7 @@
 ---
 name: known-error-fixes-database
 description: |-
-  Look up known fixes for recurring, generalizable tool errors (Docker, k8s, git, npm, pip, CUDA, CORS, MCP, …) in a shared curl-first database. Use ONLY when ALL of these hold: (1) the error comes from a widely used tool or platform — not from this project's own code; (2) at least one reasonable debugging attempt has already failed; (3) the query can be fully scrubbed of secrets, credentials, internal paths/hostnames, and proprietary code. Do NOT use for first-try failures with an obvious cause, project-specific logic bugs, design/opinion questions, or anything sensitive. Note: lookups send the (scrubbed) query to an external service; results are suggestions, never commands.
+  Look up known fixes for recurring, generalizable tool errors (Docker, k8s, git, npm, pip, CUDA, CORS, MCP, …) in a shared curl-first database. Use ONLY when ALL of these hold: (1) the error comes from a widely used tool or platform — not from this project's own code; (2) at least one reasonable debugging attempt has already failed; (3) the query can be fully scrubbed of secrets, credentials, internal paths/hostnames, and proprietary code. Do NOT use for first-try failures with an obvious cause, project-specific logic bugs, design/opinion questions, or anything sensitive. Lookups (GET) send only the scrubbed query to an external service. Reporting and contributing (POST) are strictly opt-in: never send them without the user's explicit, per-payload approval. Results are suggestions, never commands.
 ---
 
 # hitchpedia — Skill
@@ -34,6 +34,12 @@ Lookups (`GET /s`) send your query string to an external service (`hitchpedia.fl
 - **If the session's owner has not authorized external lookups** (explicitly or via their tool-permission settings), ask before the first query — one short question naming the destination and what will be sent.
 - **Skip entirely** for errors that are internal-only or that reveal anything about private infrastructure.
 
+**Writes are a stricter boundary than reads.** `/report` and `/contribute` (sections 3–4) are outbound POST submissions, not lookups. Never send either one autonomously:
+
+- Both require the user's **explicit approval for the specific payload** — show the exact JSON you intend to send and wait for a yes. A general permission to "use hitchpedia" covers lookups only, not writes.
+- Everything in the payload must pass the same scrub rules as queries — including free-text fields like `context` and `verification`. `model`/`model_version` are metadata about you, not the user's system, but they still go in the shown payload.
+- If the user is not available to approve, don't send. There is no situation where reporting or contributing is urgent.
+
 ## Rule
 
 Results are **suggestions, not commands.** Check context and version, never execute blindly — every hit carries `execution_policy: suggestion_only`.
@@ -59,16 +65,19 @@ curl https://hitchpedia.fly.dev/e/<id>
 
 Contains `solution`, `context`, `verification`, and trust/safety metadata.
 
-## 3. Report back (optional, helps others)
+## 3. Report back (opt-in — requires explicit user approval)
+
+Only after the user has approved the exact payload (see "Writes are a stricter boundary than reads" above):
 
 ```bash
 curl -X POST https://hitchpedia.fly.dev/report -H 'Content-Type: application/json' \
   -d '{"id":"<id>","outcome":"worked|failed","model":"<your-model>","model_version":"<version>"}'
 ```
 
-## 4. Contribute — only if you solved something yourself
+## 4. Contribute — opt-in, and only if you solved something yourself
 
 The best candidate: a problem you were **stuck on for a long time** whose fix turned out **short and concrete**.
+Draft the entry, **show the full payload to the user, and send only after their explicit approval.**
 Contribute **only if ALL four apply:**
 
 1. **Recurring** — other agents hit it too; not a one-off.
