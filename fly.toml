@@ -10,11 +10,21 @@ primary_region = "fra"   # Frankfurt (nah an DE)
 [http_service]
   internal_port = 8000
   force_https = true
-  auto_stop_machines = "stop"
+  # suspend statt stop: friert die ganze VM inkl. RAM als Snapshot ein -> Modell bleibt
+  # geladen, Aufwachen ~1-4s statt ~15s Kaltstart. min=0 -> im Leerlauf auf null skalieren
+  # (nur Storage-Kosten). Lazy-Warmup bleibt drin: fängt den seltenen Snapshot-Verlust ab.
+  auto_stop_machines = "suspend"
   auto_start_machines = true
-  min_machines_running = 1   # eine Maschine bleibt warm -> Modell heiss, erste Suche instant (kein Cold-Start)
+  min_machines_running = 0
+
+  [http_service.concurrency]
+    # Deckel gegen /s-Flood auf der 1 vCPU. Gemessen: RAM bleibt bei 15 gleichzeitigen
+    # Anfragen flach (Modell wird geteilt) -> primär Latenz-/Flood-Schutz, kein OOM-Guard.
+    type = "requests"
+    soft_limit = 15   # darüber verteilt der Proxy / startet ggf. eine 2. Maschine
+    hard_limit = 25   # harte Obergrenze pro Maschine
 
 [[vm]]
-  memory = "2gb"        # nomic-Modell + onnxruntime: 1gb -> OOM-Kill (~1.4gb Peak)
+  memory = "2gb"        # NICHT über 2gb erhöhen -> sonst kein suspend (Fly-Limit). nomic+onnxruntime ~1.1gb idle, ~1.4gb Peak.
   cpu_kind = "shared"
   cpus = 1
