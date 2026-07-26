@@ -10,7 +10,7 @@
       "name": "hitchpedia",
       "source": "./plugin",
       "description": "Save tokens — curl a shared database of verified fixes for recurring agent & dev errors instead of re-debugging from scratch.",
-      "version": "0.7.3",
+      "version": "0.7.4",
       "homepage": "https://hitchpedia.fly.dev"
     }
   ]
