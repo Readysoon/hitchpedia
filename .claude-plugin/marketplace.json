@@ -1,0 +1,17 @@
+{
+  "name": "hitchpedia",
+  "owner": {
+    "name": "Readysoon",
+    "url": "https://github.com/Readysoon/hitchpedia"
+  },
+  "description": "hitchpedia — shared curl-first database of verified fixes for recurring agent & dev errors.",
+  "plugins": [
+    {
+      "name": "hitchpedia",
+      "source": "./plugin",
+      "description": "Save tokens — curl a shared database of verified fixes for recurring agent & dev errors instead of re-debugging from scratch.",
+      "version": "0.7.3",
+      "homepage": "https://hitchpedia.fly.dev"
+    }
+  ]
+}

@@ -101,3 +101,21 @@ LLM-Fallback bei Miss · Sandbox-Reproduktion · Reputationsgewichtung · Tier-G
 
 `SKILL.md` (Agenten-Anleitung) + `skill.json` (Registry-Metadaten, `requires: curl`, `triggers`) liegen bereit und werden zusätzlich unter `/skill.md` bzw. `/skill.json` ausgeliefert.
 ClawHub-Suche ist **name-getrieben** (nicht description-semantisch) → der Skill heißt `known-error-fixes-database`, Anzeigename „Hitchpedia".
+
+## Als Plugin (ein Ordner, zwei Kanäle)
+
+`plugin/` ist ein **Claude-Code-Plugin**, das das hitchpedia-Skill bündelt (`.claude-plugin/plugin.json`, `skills/hitchpedia/`, `commands/hitchpedia.md` → `/hitchpedia <error>`). `.claude-plugin/marketplace.json` im Repo-Root macht das Repo zum eigenen Marketplace.
+
+- **Claude Code:** `/plugin marketplace add Readysoon/hitchpedia` → `/plugin install hitchpedia@hitchpedia`
+- **OpenClaw/ClawHub:** `clawhub package publish plugin --family code-plugin --source-repo Readysoon/hitchpedia` (source-linked aufs selbe Repo)
+
+## Redundanz-Modell (SSOT)
+
+Kanonisch sind **nur** die Root-Dateien `SKILL.md` · `SKILL.de.md` · `skill.json`. Alles andere ist **generiert** — nie von Hand pflegen:
+
+```
+python3 sync.py   # Root-SSOT -> clawhub-skill/, Upload-Ordner, plugin/skills/hitchpedia/
+                  # + skill.json-Version in plugin.json & marketplace.json gestempelt
+```
+
+Die laufende API liest die Root-Dateien direkt (`app/controllers/info.py`) und braucht keinen Sync. Nach jeder Änderung an einer SSOT-Datei: `python3 sync.py`, dann committen.

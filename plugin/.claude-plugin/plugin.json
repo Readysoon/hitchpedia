@@ -1,0 +1,33 @@
+{
+  "name": "hitchpedia",
+  "displayName": "Hitchpedia",
+  "description": "Save tokens — curl a shared database of verified fixes for recurring agent & dev errors instead of re-debugging from scratch.",
+  "version": "0.7.3",
+  "author": {
+    "name": "hitchpedia",
+    "url": "https://hitchpedia.fly.dev"
+  },
+  "homepage": "https://hitchpedia.fly.dev",
+  "repository": "https://github.com/Readysoon/hitchpedia",
+  "license": "MIT",
+  "keywords": [
+    "fixes",
+    "debugging",
+    "errors",
+    "knowledge-base",
+    "agents",
+    "curl",
+    "kubernetes",
+    "docker",
+    "git",
+    "npm",
+    "pip",
+    "pgvector",
+    "cors",
+    "mcp",
+    "llm",
+    "rate-limit",
+    "crashloopbackoff",
+    "gotchas"
+  ]
+}
