@@ -72,6 +72,12 @@ def stamp_version():
             pl["version"] = VERSION
     mp.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
+    # OpenClaw-Manifest (fürs ClawHub-bundle-plugin-Publish)
+    oc = ROOT / "plugin" / "openclaw.plugin.json"
+    data = json.loads(oc.read_text(encoding="utf-8"))
+    data["version"] = VERSION
+    oc.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
 
 if __name__ == "__main__":
     written = sync_files()

@@ -1,0 +1,7 @@
+{
+  "id": "hitchpedia",
+  "name": "Hitchpedia",
+  "description": "Save tokens — curl a shared database of verified fixes for recurring agent & dev errors instead of re-debugging from scratch.",
+  "version": "0.7.4",
+  "configSchema": {}
+}
